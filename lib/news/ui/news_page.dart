@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_feed_poc/bloc/news_bloc.dart';
 import 'package:news_feed_poc/news/widget/news_button.dart';
 import 'package:news_feed_poc/news/widget/news_image.dart';
 import 'package:news_feed_poc/news/widget/news_list.dart';
@@ -12,6 +13,7 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
+  NewsBloc newsBloc = NewsBloc();
   List<Map<String, dynamic>> sampleArticles = [
     {
       "source": {"id": "business-insider", "name": "Business Insider"},
@@ -154,6 +156,13 @@ class _NewsPageState extends State<NewsPage> {
           "Tesla is in full-blown cost-cutting mode.\r\nAfter releasing a disastrous first-quarter sales report this month, CEO Elon Musk announced the company would reveal a long-awaited robotaxi in August. \r\nBu… [+4085 chars]"
     },
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    newsBloc.add(NewsFetchEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
