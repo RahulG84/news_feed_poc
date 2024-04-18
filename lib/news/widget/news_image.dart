@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class NewsImage extends StatelessWidget {
-  String imageUrl;
+  String? imageUrl;
   double? imageHeight;
   double? imageWidth;
-  NewsImage({Key? key, required this.imageUrl, this.imageHeight, this.imageWidth})
+  NewsImage({Key? key, this.imageUrl, this.imageHeight, this.imageWidth})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Image.network(
-      imageUrl,
+      imageUrl!,
       fit: BoxFit.cover,
       height: imageHeight,
       width: imageWidth,
