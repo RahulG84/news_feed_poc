@@ -17,12 +17,11 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   FutureOr<void> newsFetchEvent(
       NewsFetchEvent event, Emitter<NewsState> emit) async {
     try {
+      emit(NewsLoadingState());
       final newsData = await ApiService.fetchNewsData(client: http.Client());
       emit(NewsSucessesState(newsData: newsData));
-      //print(newsData.articles?.map((e) => e.description));
     } catch (error) {
       emit(NewsErrorState(error: error.toString()));
-      //print(error.toString());
     }
   }
 }

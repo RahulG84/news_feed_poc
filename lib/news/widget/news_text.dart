@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NewsText extends StatelessWidget {
-  String title;
+  String? title;
   double? fontSize;
   FontWeight? fontWeight;
   Color? textColor;
@@ -20,7 +20,7 @@ class NewsText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      title,
+      title!,
       textAlign: textAlign,
       overflow: textOverflow,
       style: TextStyle(
