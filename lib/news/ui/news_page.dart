@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_feed_poc/bloc/news_bloc.dart';
-import 'package:news_feed_poc/model/news_data_model.dart';
 import 'package:news_feed_poc/news/widget/news_button.dart';
 import 'package:news_feed_poc/news/widget/news_image.dart';
 import 'package:news_feed_poc/news/widget/news_list.dart';
@@ -15,19 +14,32 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
+  ScrollController scrollController = ScrollController();
   NewsBloc newsBloc = NewsBloc();
+  String? name;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     newsBloc.add(NewsFetchEvent());
+    scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
+      if (!newsBloc.isLoading) {
+        newsBloc.add(LoadMoreNewsEvent());
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     String defaultImageUrl =
         'https://storage.googleapis.com/support-forums-api/attachment/thread-21250723-8795753597826717832.png';
+    final newsBlocState = BlocProvider.of<NewsBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: NewsText(
@@ -66,72 +78,85 @@ class _NewsPageState extends State<NewsPage> {
             case NewsSucessesState:
               final sucessesState = state as NewsSucessesState;
               return NewsList(
-                itemCount: sucessesState.newsData?.articles?.length,
+                controller: scrollController,
+                itemCount: sucessesState.newsData!.length ,
                 itemWidget: (context, index) {
-                  Articles? data = sucessesState.newsData!.articles?[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      elevation: 10,
-                      shadowColor: Colors.teal,
-                      child: Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10.00),
-                              topRight: Radius.circular(10.00),
-                            ),
-                            child: NewsImage(
-                              imageUrl: data?.urlToImage ?? defaultImageUrl,
-                              imageHeight:
-                                  MediaQuery.of(context).size.height * 0.3,
-                              imageWidth: MediaQuery.of(context).size.width * 1,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8.00,
-                              vertical: 5.00,
-                            ),
-                            child: NewsText(
-                              title: data?.title,
-                              textAlign: TextAlign.start,
-                              textColor: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8.00,
-                              vertical: 5.00,
-                            ),
-                            child: NewsText(
-                              title: data?.description ?? '',
-                              textAlign: TextAlign.start,
-                              fontSize: 14,
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: NewsText(
-                                title: data?.author ?? "Unknown Author",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                textAlign: TextAlign.end,
-                                textOverflow: TextOverflow.ellipsis,
+                  dynamic data = sucessesState.newsData?[index];
+                  // newsData.length is 3     //index 0,1,2
+                  if (sucessesState.newsData!.length >= index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 10,
+                        shadowColor: Colors.teal,
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10.00),
+                                topRight: Radius.circular(10.00),
+                              ),
+                              child: NewsImage(
+                                imageUrl: data?.urlToImage ?? defaultImageUrl,
+                                imageHeight:
+                                    MediaQuery.of(context).size.height * 0.3,
+                                imageWidth:
+                                    MediaQuery.of(context).size.width * 1,
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.00,
+                                vertical: 5.00,
+                              ),
+                              child: NewsText(
+                                title: data?.title,
+                                textAlign: TextAlign.start,
+                                textColor: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.00,
+                                vertical: 5.00,
+                              ),
+                              child: NewsText(
+                                title: data?.description ?? '',
+                                textAlign: TextAlign.start,
+                                fontSize: 14,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: NewsText(
+                                  title: data?.author ?? "Unknown Author",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  textAlign: TextAlign.end,
+                                  textOverflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+
+                            // const SizedBox(
+                            //   height: 10,
+                            // ),
+                            // ? or late --> This case we declare the variable as a null values
+                            // ! --> this  case is used when we don't  the value of name but it available at run-time
+                            // Text(name!),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
                 },
               );
             default:

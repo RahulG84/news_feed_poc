@@ -10,7 +10,7 @@ final class NewsInitial extends NewsState {}
 final class NewsLoadingState extends NewsInitial {}
 
 final class NewsSucessesState extends NewsState {
-  final NewsData? newsData;
+  List<Articles>? newsData;
   NewsSucessesState({this.newsData});
 }
 
