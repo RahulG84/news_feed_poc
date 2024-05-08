@@ -16,26 +16,23 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   }
 
   bool isLoading = false;
-  int loadNewsPerPage = 3;
+  int loadNewsPerPage=3;
   List<Articles> loadPosts = [];
 
   FutureOr<void> newsFetchEvent(
       NewsFetchEvent event, Emitter<NewsState> emit) async {
     try {
       emit(NewsLoadingState());
-      print('object');
       final newsData = await ApiService.fetchNewsData(
         client: http.Client(),
         newsPerPage: loadNewsPerPage,
       );
-      print('Received news data: $newsData');
+
       loadPosts.addAll(newsData);
       emit(NewsSucessesState(newsData: loadPosts));
-      print(loadPosts.length);
-      print(loadPosts.map((e) => e.title));
+
     } catch (error) {
       emit(NewsErrorState(error: error.toString()));
-      print(error.toString());
     }
   }
 
@@ -43,18 +40,19 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       LoadMoreNewsEvent event, Emitter<NewsState> emit) async {
     try {
       isLoading = true;
+
       final newsData = await ApiService.fetchNewsData(
         client: http.Client(),
         newsPerPage: loadNewsPerPage,
+        // 4/2 + 1 = 3 so you are on page number 3 you want to load page number 3 so it automatically update the api call
+        page: loadPosts.length ~/ loadNewsPerPage + 1,
       );
-      print(newsData.length);
+
       loadNewsPerPage += 3;
       loadPosts.addAll(newsData);
       emit(NewsSucessesState(newsData: loadPosts));
-      print(loadPosts.length);
-      print(loadPosts.map((e) => e.author));
-      isLoading = false;
 
+      isLoading = false;
     } catch (error) {
       emit(NewsErrorState(error: error.toString()));
       isLoading = false;

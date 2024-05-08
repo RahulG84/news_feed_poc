@@ -66,9 +66,7 @@ class _NewsPageState extends State<NewsPage> {
         bloc: newsBloc,
         listenWhen: (previous, current) => current is NewsActionState,
         buildWhen: (previous, current) => current is! NewsActionState,
-        listener: (context, state) {
-          //
-        },
+        listener: (context, state) {},
         builder: (context, state) {
           switch (state.runtimeType) {
             case NewsLoadingState:
@@ -79,11 +77,13 @@ class _NewsPageState extends State<NewsPage> {
               final sucessesState = state as NewsSucessesState;
               return NewsList(
                 controller: scrollController,
-                itemCount: sucessesState.newsData!.length ,
+                itemCount: sucessesState.newsData!.length +
+                    (!newsBlocState.isLoading ? 1 : 0),
                 itemWidget: (context, index) {
-                  dynamic data = sucessesState.newsData?[index];
                   // newsData.length is 3     //index 0,1,2
-                  if (sucessesState.newsData!.length >= index) {
+                  if (sucessesState.newsData!.length > index) {
+                    dynamic data = sucessesState.newsData?[index];
+                    int loadingDataLength = sucessesState.newsData!.length;
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(
@@ -147,7 +147,8 @@ class _NewsPageState extends State<NewsPage> {
                             // ),
                             // ? or late --> This case we declare the variable as a null values
                             // ! --> this  case is used when we don't  the value of name but it available at run-time
-                            // Text(name!),
+                            // Text(loadingDataLength.toString()),
+                            // Text(index.toString()),
                           ],
                         ),
                       ),
