@@ -16,7 +16,6 @@ class NewsPage extends StatefulWidget {
 class _NewsPageState extends State<NewsPage> {
   ScrollController scrollController = ScrollController();
   NewsBloc newsBloc = NewsBloc();
-  String? name;
 
   @override
   void initState() {
@@ -39,7 +38,6 @@ class _NewsPageState extends State<NewsPage> {
   Widget build(BuildContext context) {
     String defaultImageUrl =
         'https://storage.googleapis.com/support-forums-api/attachment/thread-21250723-8795753597826717832.png';
-    final newsBlocState = BlocProvider.of<NewsBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: NewsText(
@@ -73,17 +71,16 @@ class _NewsPageState extends State<NewsPage> {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            case NewsSucessesState:
-              final sucessesState = state as NewsSucessesState;
+            case NewsSuccessesState:
+              final successesState = state as NewsSuccessesState;
               return NewsList(
                 controller: scrollController,
-                itemCount: sucessesState.newsData!.length +
-                    (!newsBlocState.isLoading ? 1 : 0),
+                itemCount: successesState.newsData!.length +
+                    (!newsBloc.isLoading ? 1 : 0),
                 itemWidget: (context, index) {
                   // newsData.length is 3     //index 0,1,2
-                  if (sucessesState.newsData!.length > index) {
-                    dynamic data = sucessesState.newsData?[index];
-                    int loadingDataLength = sucessesState.newsData!.length;
+                  if (successesState.newsData!.length > index) {
+                    dynamic data = successesState.newsData?[index];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(
@@ -159,6 +156,17 @@ class _NewsPageState extends State<NewsPage> {
                     );
                   }
                 },
+              );
+            case NewsErrorState:
+              final errorState = state as NewsErrorState;
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: NewsText(
+                  title: errorState.error,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  textColor: Colors.black,
+                ),
               );
             default:
               return const SizedBox();

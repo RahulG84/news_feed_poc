@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_feed_poc/bloc/news_bloc.dart';
 import 'package:news_feed_poc/news/ui/news_page.dart';
-
 
 void main() {
   runApp(const MyApp());
@@ -20,10 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: BlocProvider(
-        create: (context) => NewsBloc(),
-        child: const NewsPage(),
-      )
+      home: const NewsPage(),
     );
   }
 }
