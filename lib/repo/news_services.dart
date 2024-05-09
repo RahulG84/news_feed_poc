@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:news_feed_poc/model/news_data_model.dart';
+import 'package:news_feed_poc/utils/constans.dart';
 
 class ApiService {
   static Future<List<Articles>> fetchNewsData(
       {required http.Client client, int? newsPerPage, int? page}) async {
-    var currDt = DateTime.now().day;
-
-    String uri =
-        'https://newsapi.org/v2/everything?q=tesla&from=2024-04-$currDt&sortBy=publishedAt&pageSize=$newsPerPage&page=$page&apiKey=5dd6ce0a24ab425a97d2280c340f2b89';
+    Constants constants = Constants();
 
     final response = await client.get(
-      Uri.parse(uri),
+      Uri.parse(
+        constants.newsUri(newsPerPage, page),
+      ),
     );
 
     if (response.statusCode == 200) {

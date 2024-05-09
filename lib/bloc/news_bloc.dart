@@ -46,8 +46,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       final newsData = await ApiService.fetchNewsData(
         client: http.Client(),
         newsPerPage: loadNewsPerPage,
-        // 4/2 + 1 = 3 so you are on page number 3 you want to load page number 3 so it automatically update the api call
-        // 8 ~/ 3 --> 2;
+        // 4 ~/ 2 + 1 = 3 so you are on page number 3 you want to load page number 3 so it automatically update the api call
         page: loadPosts.length ~/ loadNewsPerPage + 1,
       );
 

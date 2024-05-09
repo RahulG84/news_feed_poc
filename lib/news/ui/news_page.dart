@@ -150,9 +150,20 @@ class _NewsPageState extends State<NewsPage> {
                         ),
                       ),
                     );
-                  } else {
+                  } else if (!newsBloc.isLoading) {
                     return const Center(
                       child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                          child: NewsText(
+                        title: 'No more items to load',
+                        fontSize: 16,
+                        textColor: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      )),
                     );
                   }
                 },
