@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_feed_poc/bloc/news_bloc.dart';
+import 'package:news_feed_poc/news/ui/news_details_page.dart';
 import 'package:news_feed_poc/news/widget/news_button.dart';
 import 'package:news_feed_poc/news/widget/news_image.dart';
 import 'package:news_feed_poc/news/widget/news_list.dart';
 import 'package:news_feed_poc/news/widget/news_text.dart';
+import 'package:news_feed_poc/utils/constans.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({Key? key}) : super(key: key);
@@ -19,7 +21,6 @@ class _NewsPageState extends State<NewsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     newsBloc.add(NewsFetchEvent());
     scrollController.addListener(_scrollListener);
@@ -36,8 +37,6 @@ class _NewsPageState extends State<NewsPage> {
 
   @override
   Widget build(BuildContext context) {
-    String defaultImageUrl =
-        'https://storage.googleapis.com/support-forums-api/attachment/thread-21250723-8795753597826717832.png';
     return Scaffold(
       appBar: AppBar(
         title: NewsText(
@@ -83,70 +82,80 @@ class _NewsPageState extends State<NewsPage> {
                     dynamic data = successesState.newsData?[index];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        elevation: 10,
-                        shadowColor: Colors.teal,
-                        child: Column(
-                          children: [
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10.00),
-                                topRight: Radius.circular(10.00),
-                              ),
-                              child: NewsImage(
-                                imageUrl: data?.urlToImage ?? defaultImageUrl,
-                                imageHeight:
-                                    MediaQuery.of(context).size.height * 0.3,
-                                imageWidth:
-                                    MediaQuery.of(context).size.width * 1,
-                              ),
+                      child: GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NewsDetailsPage(
+                              newsList: [data],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8.00,
-                                vertical: 5.00,
-                              ),
-                              child: NewsText(
-                                title: data?.title,
-                                textAlign: TextAlign.start,
-                                textColor: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8.00,
-                                vertical: 5.00,
-                              ),
-                              child: NewsText(
-                                title: data?.description ?? '',
-                                textAlign: TextAlign.start,
-                                fontSize: 14,
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: NewsText(
-                                  title: data?.author ?? "Unknown Author",
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  textAlign: TextAlign.end,
-                                  textOverflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        child: Card(
+                          elevation: 10,
+                          shadowColor: Colors.teal,
+                          child: Column(
+                            children: [
+                              ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10.00),
+                                  topRight: Radius.circular(10.00),
+                                ),
+                                child: NewsImage(
+                                  imageUrl: data?.urlToImage ?? Constants.defaultImageUrl,
+                                  imageHeight:
+                                      MediaQuery.of(context).size.height * 0.3,
+                                  imageWidth:
+                                      MediaQuery.of(context).size.width * 1,
                                 ),
                               ),
-                            ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.00,
+                                  vertical: 5.00,
+                                ),
+                                child: NewsText(
+                                  title: data?.title,
+                                  textAlign: TextAlign.start,
+                                  textColor: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.00,
+                                  vertical: 5.00,
+                                ),
+                                child: NewsText(
+                                  title: data?.description ?? '',
+                                  textAlign: TextAlign.start,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: NewsText(
+                                    title: data?.author ?? "Unknown Author",
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    textAlign: TextAlign.end,
+                                    textOverflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
 
-                            // const SizedBox(
-                            //   height: 10,
-                            // ),
-                            // ? or late --> This case we declare the variable as a null values
-                            // ! --> this  case is used when we don't  the value of name but it available at run-time
-                            // Text(loadingDataLength.toString()),
-                            // Text(index.toString()),
-                          ],
+                              // const SizedBox(
+                              //   height: 10,
+                              // ),
+                              // ? or late --> This case we declare the variable as a null values
+                              // ! --> this  case is used when we don't  the value of name but it available at run-time
+                              // Text(loadingDataLength.toString()),
+                              // Text(index.toString()),
+                            ],
+                          ),
                         ),
                       ),
                     );

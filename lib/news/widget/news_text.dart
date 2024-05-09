@@ -9,6 +9,8 @@ class NewsText extends StatelessWidget {
   Color? textColor;
   TextAlign? textAlign;
   TextOverflow? textOverflow;
+  double? height;
+  String? fontFamily;
   NewsText({
     Key? key,
     required this.title,
@@ -17,6 +19,8 @@ class NewsText extends StatelessWidget {
     this.textColor,
     this.textAlign,
     this.textOverflow,
+    this.height,
+    this.fontFamily,
   }) : super(key: key);
 
   @override
@@ -29,6 +33,8 @@ class NewsText extends StatelessWidget {
         fontSize: fontSize,
         fontWeight: fontWeight,
         color: textColor,
+        height: height,
+        fontFamily: fontFamily,
       ),
     );
   }
