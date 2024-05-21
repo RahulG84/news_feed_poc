@@ -13,10 +13,11 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   NewsBloc() : super(NewsInitial()) {
     on<NewsFetchEvent>(newsFetchEvent);
     on<LoadMoreNewsEvent>(loadMoreNewsEvent);
+    on<SearchNewsEvent>(searchNewsEvent);
   }
 
   bool isLoading = false;
-  int loadNewsPerPage=3;
+  int loadNewsPerPage = 3;
   List<Articles> loadPosts = [];
 
   FutureOr<void> newsFetchEvent(
@@ -30,9 +31,6 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
       loadPosts.addAll(newsData);
       emit(NewsSuccessesState(newsData: loadPosts));
-
-      print('initial post per load $loadNewsPerPage');
-
     } catch (error) {
       emit(NewsErrorState(error: error.toString()));
     }
@@ -53,11 +51,28 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       loadNewsPerPage += 3;
       loadPosts.addAll(newsData);
       emit(NewsSuccessesState(newsData: loadPosts));
-
       print('after scroll post per load $loadNewsPerPage');
       print(loadPosts.length);
 
       isLoading = false;
+    } catch (error) {
+      emit(NewsErrorState(error: error.toString()));
+    }
+  }
+
+  FutureOr<void> searchNewsEvent(
+      SearchNewsEvent event, Emitter<NewsState> emit) async {
+    try {
+      final newsData = await ApiService.fetchNewsData(
+        client: http.Client(),
+      );
+
+      final searchItemsList = newsData
+          .where((element) =>
+              element.title!.toLowerCase().contains(event.query!.toLowerCase()))
+          .toList();
+
+      emit(NewsSuccessesState(newsData: searchItemsList));
     } catch (error) {
       emit(NewsErrorState(error: error.toString()));
     }

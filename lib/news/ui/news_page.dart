@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_feed_poc/bloc/news_bloc.dart';
 import 'package:news_feed_poc/news/ui/news_details_page.dart';
+import 'package:news_feed_poc/news/ui/search_page.dart';
 import 'package:news_feed_poc/news/widget/news_button.dart';
 import 'package:news_feed_poc/news/widget/news_image.dart';
 import 'package:news_feed_poc/news/widget/news_list.dart';
 import 'package:news_feed_poc/news/widget/news_text.dart';
-import 'package:news_feed_poc/utils/constans.dart';
+import 'package:news_feed_poc/utils/constants.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({Key? key}) : super(key: key);
@@ -28,11 +29,12 @@ class _NewsPageState extends State<NewsPage> {
 
   void _scrollListener() {
     if (scrollController.position.pixels ==
-        scrollController.position.maxScrollExtent) {
+        (scrollController.position.maxScrollExtent )) {
       if (!newsBloc.isLoading) {
         newsBloc.add(LoadMoreNewsEvent());
       }
     }
+
   }
 
   @override
@@ -48,7 +50,12 @@ class _NewsPageState extends State<NewsPage> {
         actions: [
           NewsButton(
             icon: const Icon(Icons.search),
-            onPress: () {},
+            onPress: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SearchPage(),
+              ),
+            ),
             iconColor: Colors.black,
           ),
           NewsButton(
@@ -102,7 +109,8 @@ class _NewsPageState extends State<NewsPage> {
                                   topRight: Radius.circular(10.00),
                                 ),
                                 child: NewsImage(
-                                  imageUrl: data?.urlToImage ?? Constants.defaultImageUrl,
+                                  imageUrl: data?.urlToImage ??
+                                      Constants.defaultImageUrl,
                                   imageHeight:
                                       MediaQuery.of(context).size.height * 0.3,
                                   imageWidth:
