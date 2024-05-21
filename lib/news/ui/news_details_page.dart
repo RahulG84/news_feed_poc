@@ -20,7 +20,6 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-
           title: NewsText(
             title: 'Breaking News',
             fontWeight: FontWeight.w500,
