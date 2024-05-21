@@ -65,14 +65,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
     try {
       final newsData = await ApiService.fetchNewsData(
         client: http.Client(),
+        field: event.query,
       );
-
-      final searchItemsList = newsData
-          .where((element) =>
-              element.title!.toLowerCase().contains(event.query!.toLowerCase()))
-          .toList();
-
-      emit(NewsSuccessesState(newsData: searchItemsList));
+      emit(NewsSuccessesState(newsData: newsData));
     } catch (error) {
       emit(NewsErrorState(error: error.toString()));
     }

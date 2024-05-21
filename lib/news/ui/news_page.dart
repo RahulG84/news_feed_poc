@@ -28,13 +28,14 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   void _scrollListener() {
-    if (scrollController.position.pixels ==
-        (scrollController.position.maxScrollExtent )) {
+    final thresholdScroll = scrollController.position.maxScrollExtent * 0.70;
+    print(
+        'threshold :  $thresholdScroll , currentScroll : ${scrollController.position.pixels}');
+    if (scrollController.position.pixels >= thresholdScroll) {
       if (!newsBloc.isLoading) {
         newsBloc.add(LoadMoreNewsEvent());
       }
     }
-
   }
 
   @override
