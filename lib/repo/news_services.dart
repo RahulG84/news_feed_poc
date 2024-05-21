@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:news_feed_poc/model/news_data_model.dart';
-import 'package:news_feed_poc/utils/constans.dart';
+import 'package:news_feed_poc/utils/constants.dart';
 
 class ApiService {
   static Future<List<Articles>> fetchNewsData(

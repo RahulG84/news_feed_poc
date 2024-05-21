@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:news_feed_poc/utils/constans.dart';
+import 'package:news_feed_poc/utils/constants.dart';
 
 import '../../model/news_data_model.dart';
 import '../widget/news_button.dart';
@@ -16,11 +16,11 @@ class NewsDetailsPage extends StatefulWidget {
 }
 
 class _NewsDetailsPageState extends State<NewsDetailsPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+
           title: NewsText(
             title: 'Breaking News',
             fontWeight: FontWeight.w500,
@@ -70,7 +70,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                       children: [
                         ClipRRect(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(12)),
+                          const BorderRadius.all(Radius.circular(12)),
                           child: Container(
                             margin: const EdgeInsets.only(top: 10, left: 10),
                             color: Colors.orange,
@@ -86,7 +86,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left:15, top: 10),
+                          padding: const EdgeInsets.only(left: 15, top: 10),
                           child: NewsText(
                             title: Constants.formatDate(data?.publishedAt),
                             textAlign: TextAlign.center,
@@ -123,7 +123,10 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          const Icon(Icons.verified, color: Colors.blueAccent,),
+                          const Icon(
+                            Icons.verified,
+                            color: Colors.blueAccent,
+                          ),
                         ],
                       ),
                     ),
@@ -156,10 +159,8 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                         child: Column(
                           children: [
                             const ClipOval(
-                              child: Icon(
-                                Icons.person,
-                                size: 40,
-                              ),
+                              child: Icon(Icons.person,
+                                  size: 40, color: Colors.deepOrangeAccent),
                             ),
                             NewsText(
                               title: data?.author ?? "Unknown Author",
