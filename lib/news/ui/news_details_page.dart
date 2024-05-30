@@ -69,18 +69,16 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                       children: [
                         ClipRRect(
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(12)),
+                              const BorderRadius.all(Radius.circular(12)),
                           child: Container(
                             margin: const EdgeInsets.only(top: 10, left: 10),
                             color: Colors.orange,
                             height: 25,
                             width: 70,
-                            child: const Text(
-                              'Business',
+                            child: NewsText(
+                              title: 'Business',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                              textColor: Colors.white,
                             ),
                           ),
                         ),

@@ -30,7 +30,7 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 70,
-        backgroundColor: Colors.cyanAccent,
+        backgroundColor: Colors.white70,
         title: Container(
           margin: const EdgeInsets.only(bottom: 10),
           height: 50,

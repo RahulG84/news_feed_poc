@@ -23,6 +23,7 @@ class ApiService {
       final List<dynamic> articles = responseData['articles'];
       List<Articles> newsList =
           articles.map((article) => Articles.fromJson(article)).toList();
+      // print('repo length ${newsList.length}');
       return newsList;
     } else if (response.statusCode == 404) {
       throw Exception('Data Not Found');
