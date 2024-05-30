@@ -17,8 +17,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   }
 
   bool isLoading = false;
-  int loadNewsPerPage = 3;
+  int loadNewsPerPage = 20;
   List<Articles> loadPosts = [];
+  bool hasMoreData = true;
 
   FutureOr<void> newsFetchEvent(
       NewsFetchEvent event, Emitter<NewsState> emit) async {
@@ -38,6 +39,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
   Future<void> loadMoreNewsEvent(
       LoadMoreNewsEvent event, Emitter<NewsState> emit) async {
+    if (isLoading || !hasMoreData) return;
     try {
       isLoading = true;
 
@@ -48,13 +50,19 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         page: loadPosts.length ~/ loadNewsPerPage + 1,
       );
 
-      loadNewsPerPage += 3;
       loadPosts.addAll(newsData);
+
+      if (loadPosts.length >= 80) {
+        hasMoreData = false;
+      }
+
       emit(NewsSuccessesState(newsData: loadPosts));
-      print('after scroll post per load $loadNewsPerPage');
-      print(loadPosts.length);
 
       isLoading = false;
+
+      print('loadPosts length: ${loadPosts.length}');
+      print('loadNewsPerPage: $loadNewsPerPage');
+      print('page number: ${loadPosts.length ~/ loadNewsPerPage + 1}');
     } catch (error) {
       emit(NewsErrorState(error: error.toString()));
     }
